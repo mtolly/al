@@ -45,6 +45,11 @@ flag stdcall {
   default: False
 }
 
+flag force-pkgconfig {
+  description: Use pkg-config on all platforms
+  default: False
+}
+
 library
   ghc-options:         -W -Wall -O2
 
@@ -53,7 +58,7 @@ library
   else
     cpp-options:       -DCALLCV=ccall
 
-  if os(windows)
+  if os(windows) && !flag(force-pkgconfig)
     if arch(x86_64)
       extra-lib-dirs:  "C:\\Program Files (x86)\\OpenAL 1.1 SDK\\libs\\Win64"
     else
@@ -62,7 +67,7 @@ library
     include-dirs:      "C:\\Program Files (x86)\\OpenAL 1.1 SDK\\include"
     extra-libraries:   OpenAL32
   else
-    if os(darwin)
+    if os(darwin) && !flag(force-pkgconfig)
       frameworks: OpenAL
       include-dirs: "/System/Library/Frameworks/OpenAL.framework/Headers/"
     else
